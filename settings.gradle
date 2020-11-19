@@ -1,0 +1,9 @@
+rootProject.name='TuyaSmart_AI_IQP'
+include ':app'
+
+include ':p2p_sdk'
+project(':p2p_sdk').projectDir = file('../TuyaSmart_AI_P2P/p2p_sdk')
+
+include ':iot_sdk'
+project(':iot_sdk').projectDir = file('../TuyaSmart_AI_IoT/iot_sdk')
+include ':iot_qr_p2p'
