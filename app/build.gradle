@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'com.tuya.buildPackage'
+
+tuyasdk {
+    excludeLib 'appcompat'
+    sdkName 'iqp-sdk'
+    sdkVersion "release"
+    isProguard false
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.1"
