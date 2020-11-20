@@ -1,0 +1,68 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'com.novoda.bintray-release'
+
+apply plugin: 'upload'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "30.0.1"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    api 'com.tuya.smart:tuyasmart-iot_sdk:1.0.8.6'
+    api 'com.tuya.smart:tuyasmart-p2p_sdk:0.1.1'
+//    api project(':p2p_sdk')
+//    api project(':iot_sdk')
+}
+
+//./gradlew iot_qr_p2p:clean iot_qr_p2p:build
+//./gradlew iot_qr_p2p:bintrayUpload
+publish {
+    userOrg = 'tuyasmartai'
+    repoName = 'sdk'
+    groupId = 'com.tuya.smart'
+    artifactId = 'tuyasmart-iot_qr_p2p_sdk'
+    publishVersion = '0.0.1'
+    desc = 'Android Device IoT QR P2P SDK'
+    bintrayUser = 'tuyasmartai'
+    bintrayKey = '52a72bc89fcada12be3f14797588b4a9c0d9833a'
+    dryRun = false
+}
+
+upInfo {
+    version = "0.0.1"
+    artifactId = "tuyasmart-iot_qr_p2p_sdk"
+    groupId = "com.tuya.smart"
+    hasPomDepend = false
+    checkPkgRes = false
+    userName = "zhangrd@tuya.com"
+    password = "KjT!t#^9g5UsP\$fR"
+    aarPath = "/app/build/iqp-sdk-release.aar"
+    builderName = "app"
+}
