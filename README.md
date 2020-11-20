@@ -60,9 +60,10 @@ maven { url 'https://maven-other.tuya.com/repository/maven-snapshots/'}
      * @param version 固件版本号（OTA用）
      * @param callback0 IoT相关回调方法
      * @param callback1 P2P相关回调方法
+     * @param channels  数据通道(index为通道, value为通道缓存大小)
      * @return
      */
-IQPManager.getInstance().init(Context context, String basePath, String productId, String uuid, String authorKey, String version, IoTCallback callback0, P2PStatusCallback callback1);
+IQPManager.getInstance().init(Context context, String basePath, String productId, String uuid, String authorKey, String version, IoTCallback callback0, P2PStatusCallback callback1, int[] channels);
 
 public interface IoTCallback {
 
