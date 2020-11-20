@@ -237,5 +237,5 @@ Tuya Smart Help Center: https://support.tuya.com/en/help
 Technical Support Council: https://iot.tuya.com/council/
 
 ## 使用的开源License
-This Tuya Android Device IPC SDK Sample is licensed under the MIT License.
+This Tuya Android Device SDK Sample is licensed under the MIT License.
 
