@@ -1,0 +1,38 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+        maven { url "https://maven.tuya-inc.top/nexus/content/repositories/central" }
+        maven { url 'https://maven.tuya-inc.top/nexus/content/repositories/snapshots/' }
+        maven { url 'https://maven.tuya-inc.top/nexus/content/repositories/releases/' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.1'
+//        classpath 'com.tuya.smart.upload:tyupload:0.3.5-ipc-SNAPSHOT'
+//        classpath 'com.novoda:bintray-release:0.9.2'
+        classpath 'com.tuya.smart:buildsdk:0.3.8.2-SNAPSHOT'
+        classpath 'com.tuya.smart:tuyasmart-bintray_upload:0.0.7'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "https://maven.tuya-inc.top/nexus/content/repositories/central" }
+        maven { url 'https://maven.tuya-inc.top/nexus/content/repositories/snapshots/' }
+        maven { url 'https://maven.tuya-inc.top/nexus/content/repositories/releases/' }
+        google()
+        jcenter()
+        maven { url 'https://dl.bintray.com/tuyasmartai/sdk' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
