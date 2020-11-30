@@ -1,3 +1,2 @@
 rootProject.name='TuyaSmart_AI_IQP'
 include ':app'
-include ':iot_qr_p2p'
