@@ -31,6 +31,7 @@ android {
         packagingOptions {
             pickFirst 'lib/*/libc++_shared.so'
             pickFirst 'lib/*/libtuya_iot.so'
+            pickFirst 'lib/*/libtuyaice.so'
         }
     }
 
@@ -59,7 +60,7 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.8'
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
 
-    implementation 'com.tuya.smart:tuyasmart-iot_qr_p2p_sdk:0.0.3'
+    implementation 'com.tuya.smart:tuyasmart-iot_qr_p2p_sdk:0.0.4'
 
     implementation 'com.tencent.mars:mars-xlog:1.2.3'
 
