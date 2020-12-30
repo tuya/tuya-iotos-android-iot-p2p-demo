@@ -72,9 +72,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         });
 
         int[] channels = new int[8];
-        channels[0] = 1024;
-        channels[1] = 1024 * 10;
-        channels[2] = 1024 * 100;
+        channels[0] = 1024 * 100;
+        channels[1] = 1024 * 1024;
+        channels[2] = 1024 * 200;
+        channels[3] = 1024 * 200;
 
         IQPManager.getInstance().init(this, "/sdcard/", BuildConfig.PID
                 , BuildConfig.UUID, BuildConfig.AUTHOR_KEY, "1.0.0", new IoTSDKManager.IoTCallback() {
