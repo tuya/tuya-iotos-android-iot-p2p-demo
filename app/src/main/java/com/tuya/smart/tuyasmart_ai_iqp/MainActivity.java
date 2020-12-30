@@ -22,6 +22,7 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -72,9 +73,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         });
 
         int[] channels = new int[8];
-        channels[0] = 1024;
-        channels[1] = 1024 * 10;
-        channels[2] = 1024 * 100;
+        channels[0] = 1024 * 100;
+        channels[1] = 1024 * 1024;
+        channels[2] = 1024 * 200;
+        channels[3] = 1024 * 200;
 
         IQPManager.getInstance().init(this, "/sdcard/", BuildConfig.PID
                 , BuildConfig.UUID, BuildConfig.AUTHOR_KEY, "1.0.0", new IoTSDKManager.IoTCallback() {
@@ -154,21 +156,22 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     @Override
                     public void onConnectSuccess(int handle) {
                         connectHandle = handle;
+                        Log.v(TAG, "onConnectSuccess handle: " + handle);
                     }
 
                     @Override
                     public void onConnectFail(int err) {
-
+                        Log.v(TAG, "onConnectFail err: " + err);
                     }
 
                     @Override
                     public void onDisconnect(int handle, int channel) {
-
+                        Log.v(TAG, "onDisconnect handle: " + handle + ",channel：" + channel);
                     }
 
                     @Override
                     public void onRecvData(int handle, int channel, byte[] data) {
-
+                        Log.v(TAG, "onRecvData handle: " + handle + ",channel：" + channel + ",data：" + Arrays.toString(data));
                     }
                 }, channels);
     }
