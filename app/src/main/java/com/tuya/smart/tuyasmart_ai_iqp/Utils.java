@@ -65,4 +65,17 @@ public class Utils {
             }
         }
     }
+
+    public static String ByteToString(byte[] bytes) {
+        StringBuilder strBuilder = new StringBuilder();
+        for (byte aByte : bytes) {
+            if (aByte != 0) {
+                strBuilder.append((char) aByte);
+            } else {
+                break;
+            }
+
+        }
+        return strBuilder.toString();
+    }
 }
