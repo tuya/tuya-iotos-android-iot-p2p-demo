@@ -28,4 +28,15 @@
         android:layout_gravity="center"
         android:layout_margin="20dp" />
 
+    <TextView
+        android:id="@+id/console"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reset"
+        android:layout_alignParentStart="true"
+        android:alpha="0.6"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="接收日志在这里输出(长按清除): \n" />
+
 </LinearLayout>
