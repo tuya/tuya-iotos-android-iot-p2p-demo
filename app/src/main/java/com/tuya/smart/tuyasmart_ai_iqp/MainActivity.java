@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private int connectHandle = -1;
 
+    TextView console;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,25 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
+    private void output(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                console.append(text + "\n");
+                com.tuya.smartai.iot_sdk.Log.d(TAG, text);
+            }
+        });
+    }
+
+    private void clear() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                console.setText("接收日志在这里输出(长按清除): \n");
+            }
+        });
+    }
+
     private void init() {
         HandlerManager.getInstance().setFileDir(
                 getExternalFilesDir("video").getPath(),
@@ -70,6 +91,16 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 getExternalFilesDir("image").getPath());
 
         ZXingLibrary.initDisplayOpinion(this);
+
+        console = findViewById(R.id.console);
+        console.setOnLongClickListener(new View.OnLongClickListener() {
+                                           @Override
+                                           public boolean onLongClick(View v) {
+                                               clear();
+                                               return false;
+                                           }
+                                       }
+        );
 
         findViewById(R.id.reset).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             public void onClick(View v) {
                 if (connectHandle > 0) {
                     int send = IQPManager.getInstance().getP2P().send(connectHandle, 0, "hello from server".getBytes());
-                    Log.d(TAG, "send return: " + send);
+                    output("send return: " + send);
                 }
             }
         });
@@ -94,14 +125,18 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         channels[2] = 1024 * 200;
         channels[3] = 1024 * 200;
 
+        output("固件版本：" + BuildConfig.VERSION_NAME);
+
+        output("init sdk：" + BuildConfig.PID + "/" + BuildConfig.UUID + "/" + BuildConfig.AUTHOR_KEY);
+
         IQPManager.getInstance().init(this, "/sdcard/", BuildConfig.PID
                 , BuildConfig.UUID, BuildConfig.AUTHOR_KEY, "1.0.0", new IoTSDKManager.IoTCallback() {
                     @Override
                     public void onDpEvent(DPEvent event) {
                         if (event != null) {
-                            Log.w(TAG, "rev dp: " + event);
+                            output("收到 dp: " + event);
                             if (event.type == DPEvent.Type.PROP_RAW) {
-                                Log.w(TAG, Base64.encodeToString((byte[]) event.value, Base64.DEFAULT));
+                                output(Base64.encodeToString((byte[]) event.value, Base64.DEFAULT));
                             }
                         }
                     }
@@ -121,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
                     @Override
                     public void onShorturl(String urlJson) {
-                        Log.w(TAG, "shorturl: " + urlJson);
+                        output("shorturl: " + urlJson);
 
                         final String url = (String) com.alibaba.fastjson.JSONObject.parseObject(urlJson).get("shortUrl");
 
@@ -137,17 +172,17 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
                     @Override
                     public void onActive() {
-                        Log.w(TAG, "onActive: " + IQPManager.getInstance().getIoT().getDeviceId());
+                        output("onActive: " + IQPManager.getInstance().getIoT().getDeviceId());
                     }
 
                     @Override
                     public void onFirstActive() {
-                        Log.w(TAG, "onFirstActive");
+                        output("onFirstActive");
                     }
 
                     @Override
                     public void onMQTTStatusChanged(int status) {
-                        Log.e(TAG, "Status: " + status);
+                        output("Status: " + status);
                         switch (status) {
                             case IoTSDKManager.STATUS_OFFLINE:
                                 // 设备网络离线
@@ -172,23 +207,23 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     @Override
                     public void onConnectSuccess(int handle) {
                         connectHandle = handle;
-                        Log.v(TAG, "onConnectSuccess handle: " + handle);
+                        output("onConnectSuccess handle: " + handle);
                     }
 
                     @Override
                     public void onConnectFail(int err) {
-                        Log.v(TAG, "onConnectFail err: " + err);
+                        output("onConnectFail err: " + err);
                     }
 
                     @Override
                     public void onDisconnect(int handle, int channel) {
-                        Log.v(TAG, "onDisconnect handle: " + handle + ",channel：" + channel);
+                        output("onDisconnect handle: " + handle + ",channel：" + channel);
                     }
 
                     @Override
                     public void onRecvData(int handle, int channel, byte[] data) {
                         if (connectHandle == handle) {
-                            Log.v(TAG, "onRecvData handle: " + handle + ",channel：" + channel + ",data：" + data.length);
+                            output("onRecvData handle: " + handle + ",channel：" + channel + ",data：" + data.length);
                             HandlerManager.getInstance().handlerData(channel, data);
                         }
                     }
