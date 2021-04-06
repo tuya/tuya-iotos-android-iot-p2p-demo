@@ -20,7 +20,8 @@ demo界面会展示激活二维码，使用涂鸦智能APP扫码即可。
 ## 接入
 
 ```groovy
-implementation 'com.tuya.smart:tuyasmart-iot_qr_p2p:0.0.8'
+implementation 'com.tuya.smart:tuyasmart-iot_qr_p2p:0.0.9'
+implementation 'com.tuya.smart:tuyasmart-iot_sdk:1.0.8.8'
 implementation 'com.tencent.mars:mars-xlog:1.2.3'
 ```
 
