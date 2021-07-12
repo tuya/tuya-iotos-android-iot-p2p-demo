@@ -5,8 +5,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -23,18 +21,8 @@ import com.tuya.smartai.iot_sdk.IoTSDKManager;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -158,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     public void onShorturl(String urlJson) {
                         output("shorturl: " + urlJson);
 
+                        if(urlJson == null)
+                            return;
+
                         final String url = (String) com.alibaba.fastjson.JSONObject.parseObject(urlJson).get("shortUrl");
 
                         runOnUiThread(new Runnable() {
@@ -224,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     public void onRecvData(int handle, int channel, byte[] data) {
                         if (connectHandle == handle) {
                             output("onRecvData handle: " + handle + ",channel：" + channel + ",data：" + data.length);
-                            HandlerManager.getInstance().handlerData(channel, data);
+                            HandlerManager.getInstance().handlerData(handle, channel, data);
                         }
                     }
                 }, channels);

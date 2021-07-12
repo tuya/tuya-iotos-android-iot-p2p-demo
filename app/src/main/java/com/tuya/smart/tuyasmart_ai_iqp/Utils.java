@@ -22,6 +22,33 @@ public class Utils {
         return num;
     }
 
+    public static byte[] intToByteArray(int i) {
+        byte[] result = new byte[4];
+        result[0] = (byte)((i >> 24) & 0xFF);
+        result[1] = (byte)((i >> 16) & 0xFF);
+        result[2] = (byte)((i >> 8) & 0xFF);
+        result[3] = (byte)(i & 0xFF);
+        return result;
+    }
+
+    public static int bytes2Int(byte[] byteNum) {
+        int num = 0;
+        for (int ix = 0; ix < 4; ++ix) {
+            num <<= 8;
+            num |= (byteNum[ix] & 0xff);
+        }
+        return num;
+    }
+
+    public static short bytes2Short(byte[] byteNum) {
+        short num = 0;
+        for (int ix = 0; ix < 2; ++ix) {
+            num <<= 8;
+            num |= (byteNum[ix] & 0xff);
+        }
+        return num;
+    }
+
     /**
      * 根据byte数组，生成文件
      */
