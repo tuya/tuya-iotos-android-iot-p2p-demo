@@ -2,6 +2,8 @@ package com.tuya.smart.tuyasmart_ai_iqp;
 
 import android.util.Log;
 
+import com.tuya.smart.ai.iot_qr_p2p.IQPManager;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,14 +81,83 @@ public class HandlerManager {
         this.imageFileDir = imageFileDir;
     }
 
+    public static final int STATE_IDLE = 0;
+    public static final int STATE_START = 1;
+    public static final int STATE_DONE = 2;
+    public static final int STATE_ERR = 3;
+    int currentState = STATE_IDLE;
+
+    /**
+     * 处理命令
+     *
+     * @param data
+     */
+    public int handlerCmd(int handle, int channel, byte[] data) {
+        byte[] ackArray = new byte[36];
+        // 1. 拿到类型
+        System.arraycopy(data, 0, ackArray, 0, 20);
+
+        byte[] type = Utils.intToByteArray(1);
+        System.arraycopy(type, 0, ackArray, 20, type.length);
+
+        byte[] highCmd = Utils.intToByteArray(1);
+        System.arraycopy(highCmd, 0, ackArray, 24, highCmd.length);
+
+        byte[] lowCmd = Utils.intToByteArray(1);
+        System.arraycopy(lowCmd, 0, ackArray, 26, lowCmd.length);
+
+        byte[] channelId = Utils.intToByteArray(3);
+        System.arraycopy(channelId, 0, ackArray, 28, channelId.length);
+
+        byte[] length = Utils.intToByteArray(36);
+        System.arraycopy(length, 0, ackArray, 32, length.length);
+
+        int ret = IQPManager.getInstance().getP2P().send(handle, channel, ackArray);
+        Log.v(TAG, "cmd send ack ret:" + ret);
+
+//        System.arraycopy(data, 12, typeArray, 0, 4);
+//        int type = Utils.bytes2Int(typeArray);
+//        Log.v(TAG, "cmd type:" + type);
+//        // 2. 拿到命令
+//        byte[] cmdArray = new byte[2];
+//        System.arraycopy(data, 18, cmdArray, 0, 2);
+//        short cmd = Utils.bytes2Short(cmdArray);
+//        Log.v(TAG, "cmd lowCmd:" + cmd);
+//        // 3. 保存状态
+//        currentState = cmd;
+//        Log.v(TAG, "currentState: " + currentState);
+//        // 4. 回复响应
+//        byte[] ackArray = new byte[28];
+//        System.arraycopy(data, 0, ackArray, 0, 28);
+//        ackArray[15] = 1;
+//        Log.v(TAG, "cmd ack type:" + ackArray[15]);
+//        P2PSDKManager p2pSDKManager = IQPManager.getInstance().getP2P();
+//        int ret = p2pSDKManager.send(handle, channel, ackArray);
+//        Log.v(TAG, "cmd send ack ret:" + ret);
+
+        return 0;
+    }
+
     /**
      * 处理数据
      *
      * @param channel
      * @param data
      */
-    public void handlerData(int channel, byte[] data) {
+    public void handlerData(int handle, int channel, byte[] data) {
+
+//        if (currentState == STATE_ERR) {
+//            // TODO: 删除不完整文件，重置状态
+//            currentState = STATE_IDLE;
+//            return;
+//        }
         if (!isHandleFirst) {
+
+            if (channel == 0) {
+                handlerCmd(handle, channel, data);
+                return;
+            }
+
             Log.v(TAG, "新文件开始");
             //此时是第一个报文
             //拿头部报文第一个字段：id
